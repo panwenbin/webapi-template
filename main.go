@@ -3,16 +3,13 @@ package main
 import _ "app/init"
 
 import (
-	"app/actions"
 	"app/databases"
-	"github.com/gin-gonic/gin"
+	"app/routers"
 )
 
 func main() {
 	databases.AutoMigrate()
 
-	r := gin.Default()
-	r.GET("/hello", actions.Hello)
-
+	r := routers.Load()
 	r.Run()
 }
