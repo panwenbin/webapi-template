@@ -1,7 +1,5 @@
 package main
 
-import _ "app/init"
-
 import (
 	"app/databases"
 	"app/routers"

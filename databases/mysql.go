@@ -1,11 +1,11 @@
 package databases
 
 import (
+	"app/settings"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"
-	"os"
 	"time"
 )
 
@@ -16,14 +16,14 @@ func init() {
 
 	connArgs := fmt.Sprintf(
 		"%s:%s@(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("DB_USERNAME"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_DATABASE"),
+		settings.DbUsername,
+		settings.DbPassword,
+		settings.DbHost,
+		settings.DbPort,
+		settings.DbDatabase,
 	)
 
-	Db, err = gorm.Open(os.Getenv("DB_CONNECTION"), connArgs)
+	Db, err = gorm.Open(settings.DbConnection, connArgs)
 
 	if err != nil {
 		log.Fatalln(err)
@@ -33,8 +33,7 @@ func init() {
 	Db.DB().SetMaxIdleConns(20)
 	Db.DB().SetConnMaxLifetime(55 * time.Second)
 
-	debug := os.Getenv("DEBUG")
-	if debug != "" && debug != "false" && debug != "0" {
+	if settings.Debug {
 		Db = Db.Debug()
 	}
 }
