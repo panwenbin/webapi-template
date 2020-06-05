@@ -1,4 +1,4 @@
-FROM golang:1.12 as builder
+FROM golang:latest as builder
 
 ARG GOPROXY
 ENV GORPOXY ${GOPROXY}
@@ -9,12 +9,10 @@ WORKDIR /builder
 
 RUN go build main.go
 
-FROM golang:1.12
+FROM panwenbin/alpinetz:latest
 
 COPY --from=builder /builder/main /app/api
 
 WORKDIR /app
 
 CMD ["./api"]
-
-EXPOSE 8080
