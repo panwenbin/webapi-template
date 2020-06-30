@@ -9,6 +9,7 @@ import (
 var Debug bool
 
 var EnableMysql bool
+var EnableMongo bool
 
 func boolString(s string) bool {
 	if s != "" && s != "false" && s != "FALSE" && s != "0" {
@@ -23,6 +24,7 @@ func init() {
 
 	Debug = boolString(os.Getenv("DEBUG"))
 	EnableMysql = boolString(os.Getenv("ENABLE_MYSQL"))
+	EnableMongo = boolString(os.Getenv("ENABLE_MONGO"))
 }
 
 func RequireEnvs(needEnvs []string) {

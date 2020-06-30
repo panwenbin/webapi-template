@@ -7,4 +7,5 @@ require (
 	github.com/jinzhu/gorm v1.9.14
 	github.com/joho/godotenv v1.3.0
 	github.com/mattn/go-sqlite3 v2.0.1+incompatible // indirect
+	go.mongodb.org/mongo-driver v1.3.4
 )
