@@ -6,24 +6,49 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"
+	"os"
 	"time"
 )
 
 var Db *gorm.DB
 
+var (
+	DbConnection string
+	DbUsername   string
+	DbPassword   string
+	DbHost       string
+	DbPort       string
+	DbDatabase   string
+)
+
 func init() {
+	if settings.EnableMysql == false {
+		return
+	}
+
+	settings.RequireEnvs([]string{
+		"DB_CONNECTION", "DB_HOST", "DB_PORT", "DB_DATABASE", "DB_USERNAME", "DB_PASSWORD",
+	})
+
+	DbConnection = os.Getenv("DB_CONNECTION")
+	DbUsername = os.Getenv("DB_USERNAME")
+	DbPassword = os.Getenv("DB_PASSWORD")
+	DbHost = os.Getenv("DB_HOST")
+	DbPort = os.Getenv("DB_PORT")
+	DbDatabase = os.Getenv("DB_DATABASE")
+
 	var err error
 
 	connArgs := fmt.Sprintf(
 		"%s:%s@(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		settings.DbUsername,
-		settings.DbPassword,
-		settings.DbHost,
-		settings.DbPort,
-		settings.DbDatabase,
+		DbUsername,
+		DbPassword,
+		DbHost,
+		DbPort,
+		DbDatabase,
 	)
 
-	Db, err = gorm.Open(settings.DbConnection, connArgs)
+	Db, err = gorm.Open(DbConnection, connArgs)
 
 	if err != nil {
 		log.Fatalln(err)
@@ -35,5 +60,11 @@ func init() {
 
 	if settings.Debug {
 		Db = Db.Debug()
+	}
+}
+
+func AutoMigrate() {
+	if settings.EnableMysql {
+		Db.AutoMigrate()
 	}
 }

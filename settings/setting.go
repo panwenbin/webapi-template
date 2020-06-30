@@ -6,43 +6,29 @@ import (
 	"os"
 )
 
-var DbConnection string
-var DbUsername string
-var DbPassword string
-var DbHost string
-var DbPort string
-var DbDatabase string
-
 var Debug bool
 
-func init() {
-	checkEnv()
-	LoadSetting()
-}
+var EnableMysql bool
 
-func checkEnv() {
-	_ = godotenv.Load()
-	needChecks := []string{
-		"DB_CONNECTION", "DB_HOST", "DB_PORT", "DB_DATABASE", "DB_USERNAME", "DB_PASSWORD",
+func boolString(s string) bool {
+	if s != "" && s != "false" && s != "FALSE" && s != "0" {
+		return true
 	}
 
-	for _, envKey := range needChecks {
+	return false
+}
+
+func init() {
+	_ = godotenv.Load()
+
+	Debug = boolString(os.Getenv("DEBUG"))
+	EnableMysql = boolString(os.Getenv("ENABLE_MYSQL"))
+}
+
+func RequireEnvs(needEnvs []string) {
+	for _, envKey := range needEnvs {
 		if os.Getenv(envKey) == "" {
 			log.Fatalf("env %s missed", envKey)
 		}
-	}
-}
-
-func LoadSetting() {
-	DbConnection = os.Getenv("DB_CONNECTION")
-	DbUsername = os.Getenv("DB_USERNAME")
-	DbPassword = os.Getenv("DB_PASSWORD")
-	DbHost = os.Getenv("DB_HOST")
-	DbPort = os.Getenv("DB_PORT")
-	DbDatabase = os.Getenv("DB_DATABASE")
-
-	debug := os.Getenv("DEBUG")
-	if debug != "" && debug != "false" && debug != "0" {
-		Debug = true
 	}
 }
