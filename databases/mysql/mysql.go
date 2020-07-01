@@ -1,4 +1,4 @@
-package databases
+package mysql
 
 import (
 	"app/settings"
@@ -22,10 +22,6 @@ var (
 )
 
 func init() {
-	if settings.EnableMysql == false {
-		return
-	}
-
 	settings.RequireEnvs([]string{
 		"DB_CONNECTION", "DB_HOST", "DB_PORT", "DB_DATABASE", "DB_USERNAME", "DB_PASSWORD",
 	})
@@ -61,10 +57,5 @@ func init() {
 	if settings.Debug {
 		Db = Db.Debug()
 	}
-}
-
-func AutoMigrate() {
-	if settings.EnableMysql {
-		Db.AutoMigrate()
-	}
+	Db.AutoMigrate()
 }

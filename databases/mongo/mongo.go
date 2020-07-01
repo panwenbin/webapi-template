@@ -1,4 +1,4 @@
-package databases
+package mongo
 
 import (
 	"app/settings"
@@ -18,10 +18,6 @@ var (
 )
 
 func init() {
-	if settings.EnableMongo == false {
-		return
-	}
-
 	settings.RequireEnvs([]string{
 		"MONGODB_URI",
 	})
