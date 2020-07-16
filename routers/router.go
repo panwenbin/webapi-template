@@ -8,7 +8,7 @@ import (
 var r *gin.Engine
 
 func Load() *gin.Engine {
-	r.GET("/hello", actions.Hello)
+	r.GET("/status", actions.Status)
 
 	return r
 }

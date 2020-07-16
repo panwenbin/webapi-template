@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-func Hello(c *gin.Context) {
+func Status(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"msg": "hello",
+		"msg": "OK",
 	})
 }
