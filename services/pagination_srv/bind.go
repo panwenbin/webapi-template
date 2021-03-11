@@ -3,7 +3,7 @@ package pagination_srv
 import (
 	"app/structs/requests"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // Bind binds pagination queries in request to a gorm Query
