@@ -2,6 +2,7 @@ package routers
 
 import (
 	"app/actions"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,4 +16,5 @@ func Load() *gin.Engine {
 
 func init() {
 	r = gin.Default()
+	r.Use(gzip.Gzip(gzip.DefaultCompression, gzip.WithDecompressFn(gzip.DefaultDecompressHandle)))
 }
