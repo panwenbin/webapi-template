@@ -2,15 +2,15 @@ package clickhouse
 
 import (
 	"app/settings"
-	"database/sql"
+	"context"
 	"fmt"
+	"github.com/ClickHouse/clickhouse-go/v2"
+	"github.com/ClickHouse/clickhouse-go/v2/lib/driver"
 	"log"
 	"os"
-
-	"github.com/ClickHouse/clickhouse-go"
 )
 
-var ClickHouse *sql.DB
+var ClickHouse driver.Conn
 
 var (
 	ClickHouseUri string
@@ -22,13 +22,13 @@ func init() {
 	})
 
 	ClickHouseUri = os.Getenv("CLICKHOUSE_URI")
-	var err error
-	ClickHouse, err = sql.Open("clickhouse", ClickHouseUri)
+	options, err := clickhouse.ParseDSN(ClickHouseUri)
+	ClickHouse, err = clickhouse.Open(options)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if err := ClickHouse.Ping(); err != nil {
+	if err := ClickHouse.Ping(context.Background()); err != nil {
 		if exception, ok := err.(*clickhouse.Exception); ok {
 			fmt.Printf("[%d] %s \n%s\n", exception.Code, exception.Message, exception.StackTrace)
 		} else {
